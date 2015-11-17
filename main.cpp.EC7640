@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 
     MainWindow w;
 
-    QObject::connect(&app, &Application::dataReady, &w, &MainWindow::plotData);
+    QObject::conncet(&app, &Application::dataReady, &w, &MainWindow::plotData);
     w.show();
 
     return app.exec();

@@ -1,9 +1,10 @@
 #include "Application.h"
 
 Application::Application(int argc, char *argv[], int port, QFile &file)
-    : QCoreApplication(argc,argv), logFile(file)
+    : QApplication(argc,argv), logFile(file)
 {
     connect(&server, &SocketServer::dataReady, this, &Application::serverDataReady);
+
     server.start(port);
 }
 
@@ -46,6 +47,13 @@ void Application::parseRawData()
     qDebug() << "Temperature: \t" << this->temperature << " °C";
     qDebug() << "Humidity: \t" << this->humidity << " %";
     qDebug() << "Bat. voltage: \t" << this->vbat << " mV";
+
+    data.clear();
+    data.enqueue(temperature);
+    data.enqueue(humidity);
+    data.enqueue(vbat);
+
+    emit dataReady(data,timeObj);
 }
 
 void Application::saveToLogFile()

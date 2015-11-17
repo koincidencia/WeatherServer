@@ -1,11 +1,17 @@
 TEMPLATE = app
 
 QT += qml quick
+QT       += core gui
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 CONFIG += c++14
+
+CONFIG += static
 
 SOURCES += main.cpp \
     Application.cpp \
-    SocketServer.cpp
+    SocketServer.cpp \
+    qcustomplot.cpp \
+    mainwindow.cpp
 
 RESOURCES += qml.qrc
 
@@ -20,5 +26,10 @@ DISTFILES += \
 
 HEADERS += \
     Application.h \
-    SocketServer.h
+    SocketServer.h \
+    qcustomplot.h \
+    mainwindow.h
+
+FORMS += \
+    mainwindow.ui
 
