@@ -6,6 +6,12 @@ Application::Application(int argc, char *argv[], int port, QFile &file)
     connect(&server, &SocketServer::dataReady, this, &Application::serverDataReady);
 
     server.start(port);
+
+    QObject::connect(this, &Application::dataReady, &w, &MainWindow::plotData);
+    QObject::connect(this, &Application::dataFromLogReady, &w, &MainWindow::plotLog);
+    connect(&w, &MainWindow::loadLogFile, this, &Application::LoadLogFile);
+
+    w.show();
 }
 
 void Application::serverDataReady(QDataStream& inStream)
@@ -66,6 +72,48 @@ void Application::saveToLogFile()
         stream << this->humidity << "\t";
         stream << this->vbat << endl;
         logFile.close();
+    }
+    else
+        qDebug() << "Nem lehet a fajlt megnyitni.";
+}
+
+
+void Application::LoadLogFile(QString path)
+{
+    QFile fileToRead(path);
+    if(fileToRead.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QVector<double> timeVec, tempVec, humVec, vbatVec;
+        QVector<QVector<double>> dataVec;
+
+        QTextStream stream(&fileToRead);
+        QString line;
+        QStringList strList;
+        QDateTime time;
+        line = stream.readLine();
+        while(!line.isNull())
+        {
+            strList = line.split('\t');
+            time = QDateTime::fromString(strList.first(),QString("yyyy.MM.dd hh:mm:ss"));
+            temperature = strList[1].toDouble();
+            humidity = strList[2].toDouble();
+            vbat = strList[3].toDouble();
+
+            timeVec.append(time.toTime_t());
+            tempVec.append(temperature);
+            humVec.append(humidity);
+            vbatVec.append(vbat);
+            dataVec.clear();
+            dataVec.append(tempVec);
+            dataVec.append(humVec);
+            dataVec.append(vbatVec);
+
+            line = stream.readLine();
+        }
+        qDebug() << "dataFromLogReady emittálás...";
+        emit dataFromLogReady(timeVec, dataVec);
+        qDebug() << "dataFromLogReady emittálva.";
+        fileToRead.close();
     }
     else
         qDebug() << "Nem lehet a fajlt megnyitni.";

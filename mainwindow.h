@@ -64,7 +64,12 @@ public:
   
 public slots:
   void plotData(QQueue<double>& data, QDateTime& time);
-  
+  void plotLog(QVector<double>&,QVector<QVector<double>>&);
+  void loadLog(bool);
+
+signals:
+  void loadLogFile(QString);
+
 private:
   Ui::MainWindow *ui;
   QString demoName;

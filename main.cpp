@@ -1,7 +1,6 @@
 #include "Application.h"
 #include "SocketServer.h"
 #include "SocketClient.h"
-#include "mainwindow.h"
 
 int main(int argc, char *argv[])
 {
@@ -9,10 +8,6 @@ int main(int argc, char *argv[])
 
     Application app(argc, argv, 3333, file);
 
-    MainWindow w;
-
-    QObject::connect(&app, &Application::dataReady, &w, &MainWindow::plotData);
-    w.show();
 
     return app.exec();
 }

@@ -56,6 +56,9 @@ MainWindow::MainWindow(QWidget *parent) :
   ui->setupUi(this);
   setGeometry(400, 250, 542, 390);
 
+
+  connect(ui->actionLoadLogFile, SIGNAL(triggered(bool)), this, SLOT(loadLog(bool)));
+
   ui->customPlot->addGraph();
   ui->customPlot2->addGraph();
   ui->customPlot3->addGraph();
@@ -68,12 +71,25 @@ MainWindow::MainWindow(QWidget *parent) :
   ui->customPlot->yAxis->setRange(-10, 30);
   ui->customPlot->xAxis->setTickLabelType(QCPAxis::ltDateTime);
   ui->customPlot->xAxis->setDateTimeFormat("yyyy.MM.dd.\nhh:mm");
+  ui->customPlot->setInteraction(QCP::iRangeDrag, true);
+  ui->customPlot->setInteraction(QCP::iRangeZoom, true);
+  ui->customPlot->axisRect()->setRangeZoom(ui->customPlot3->xAxis->orientation());
+  ui->customPlot->graph()->setPen(QPen(Qt::blue));
+  ui->customPlot->graph()->setLineStyle(QCPGraph::lsNone);
+  ui->customPlot->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCross, 4));
+
 
   ui->customPlot2->xAxis->setLabel("t");
   ui->customPlot2->yAxis->setLabel("RH[%]");
   ui->customPlot2->yAxis->setRange(-1, 101);
   ui->customPlot2->xAxis->setTickLabelType(QCPAxis::ltDateTime);
   ui->customPlot2->xAxis->setDateTimeFormat("yyyy.MM.dd.\nhh:mm");
+  ui->customPlot2->setInteraction(QCP::iRangeDrag, true);
+  ui->customPlot2->setInteraction(QCP::iRangeZoom, true);
+  ui->customPlot2->axisRect()->setRangeZoom(ui->customPlot3->xAxis->orientation());
+  ui->customPlot2->graph()->setPen(QPen(Qt::blue));
+  ui->customPlot2->graph()->setLineStyle(QCPGraph::lsNone);
+  ui->customPlot2->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCross, 4));
 
 
   ui->customPlot3->xAxis->setLabel("t");
@@ -81,6 +97,12 @@ MainWindow::MainWindow(QWidget *parent) :
   ui->customPlot3->yAxis->setRange(2700, 4300);
   ui->customPlot3->xAxis->setTickLabelType(QCPAxis::ltDateTime);
   ui->customPlot3->xAxis->setDateTimeFormat("yyyy.MM.dd.\nhh:mm");
+  ui->customPlot3->setInteraction(QCP::iRangeDrag, true);
+  ui->customPlot3->setInteraction(QCP::iRangeZoom, true);
+  ui->customPlot3->axisRect()->setRangeZoom(ui->customPlot3->xAxis->orientation());
+  ui->customPlot3->graph()->setPen(QPen(Qt::blue));
+  ui->customPlot3->graph()->setLineStyle(QCPGraph::lsNone);
+  ui->customPlot3->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCross, 4));
 
 }
 MainWindow::~MainWindow(){}
@@ -97,6 +119,19 @@ void MainWindow::plotData(QQueue<double>& data, QDateTime& time)
 
     statusBar()->clearMessage();
 }
+void MainWindow::plotLog(QVector<double>& timeVec,QVector<QVector<double>>& dataVec)
+{
+    this->timeVec = timeVec;
+    tempVec = dataVec[0];
+    humVec = dataVec[1];
+    vbatVec = dataVec[2];
+    qDebug() << "Log plottolás 1.";
+    Replot(ui->customPlot, dataVec[0], timeVec);
+    qDebug() << "Log plottolás 2.";
+    Replot(ui->customPlot2, dataVec[1], timeVec);
+    qDebug() << "Log plottolás 3.";
+    Replot(ui->customPlot3, dataVec[2], timeVec);
+}
 
 void MainWindow::Replot(QCustomPlot* cp, QVector<double>& data, QVector<double>& time)
 {
@@ -105,6 +140,11 @@ void MainWindow::Replot(QCustomPlot* cp, QVector<double>& data, QVector<double>&
    cp->replot();
 }
 
+
+void MainWindow::loadLog(bool b)
+{
+    emit loadLogFile(QString("dataLog.txt"));
+}
 
 
 

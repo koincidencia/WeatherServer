@@ -11,6 +11,7 @@
 #include <QQueue>
 #include "SocketClient.h"
 #include "SocketServer.h"
+#include "mainwindow.h"
 
 /**
  * @brief Az alkalmazás osztály.s
@@ -27,11 +28,15 @@ public:
     ~Application() = default;
 signals:
     void dataReady(QQueue<double>&, QDateTime&);
+    void dataFromLogReady(QVector<double>&,QVector<QVector<double>>&);
+
+public slots:
+    void LoadLogFile(QString);
 
 private:
     /** Szerver oldali kommunikáció. */
     SocketServer server;
-
+    MainWindow w;
 
     quint8 rawData[256];
     double temperature;
@@ -40,18 +45,16 @@ private:
     QQueue<double> data;
 
     QFile &logFile;
+    QString logFilePath;
     QDateTime timeObj;
 
-    QString logFilePath;
+    /** Függvények*/
     void parseRawData();
     void saveToLogFile();
 
+
 private slots:
-
-    /** A server dataReady signaljához kötött slot. "Mizu?" kérdés esetén
-     * ez küldi vissza a választ. */
     void serverDataReady(QDataStream& inStream);
-
 };
 
 #endif // APPLICATION_H
