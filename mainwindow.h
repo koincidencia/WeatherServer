@@ -46,6 +46,7 @@
 #include <QVector>
 #include <QTimer>
 #include "qcustomplot.h" // the header file of QCustomPlot. Don't forget to add it to your project, if you use an IDE, so it gets compiled.
+#include <QKeyEvent>
 
 namespace Ui {
 class MainWindow;
@@ -66,6 +67,9 @@ public slots:
   void plotData(QQueue<double>& data, QDateTime& time);
   void plotLog(QVector<double>&,QVector<QVector<double>>&);
   void loadLog(bool);
+
+  void keyPressEvent(QKeyEvent*);
+  void keyReleaseEvent(QKeyEvent*);
 
 signals:
   void loadLogFile(QString);

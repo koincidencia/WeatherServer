@@ -56,6 +56,7 @@ MainWindow::MainWindow(QWidget *parent) :
   ui->setupUi(this);
   setGeometry(400, 250, 542, 390);
 
+  setFocusPolicy(Qt::StrongFocus);
 
   connect(ui->actionLoadLogFile, SIGNAL(triggered(bool)), this, SLOT(loadLog(bool)));
 
@@ -148,6 +149,26 @@ void MainWindow::loadLog(bool b)
 
 
 
+void MainWindow::keyReleaseEvent(QKeyEvent* e)
+{
+    if(e->key() == Qt::Key_X)
+    {
+        ui->customPlot->axisRect()->setRangeZoom(ui->customPlot3->xAxis->orientation());
+        ui->customPlot2->axisRect()->setRangeZoom(ui->customPlot3->xAxis->orientation());
+        ui->customPlot3->axisRect()->setRangeZoom(ui->customPlot3->xAxis->orientation());
+    }
+    if(e->key() == Qt::Key_Y)
+    {
+        ui->customPlot->axisRect()->setRangeZoom(ui->customPlot3->yAxis->orientation());
+        ui->customPlot2->axisRect()->setRangeZoom(ui->customPlot3->yAxis->orientation());
+        ui->customPlot3->axisRect()->setRangeZoom(ui->customPlot3->yAxis->orientation());
+    }
+}
+
+void MainWindow::keyPressEvent(QKeyEvent* e)
+{
+    return;
+}
 
 
 
