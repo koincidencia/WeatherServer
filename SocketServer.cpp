@@ -14,12 +14,12 @@ void SocketServer::start(unsigned int port)
     // A szerver socket megnyitja a portot.
     if (!serverSocket.listen(QHostAddress::Any, port))
     {
-        qWarning() << "SocketServer::Start: Nem sikerült megnyitni a server socketet: ";
-        qWarning() << serverSocket.errorString();
+        qDebug() << "SocketServer::Start: Nem sikerült megnyitni a server socketet: ";
+        qDebug() << serverSocket.errorString();
     }
     else
     {
-        qWarning() << "SocketServer::Start: A server socket bejövő kapcsolatra vár...";
+        qDebug() << "SocketServer::Start: A server socket bejövő kapcsolatra vár...";
     }
 
     // Bekötjük a newConnection slotot.
@@ -54,13 +54,13 @@ void SocketServer::newConnection()
         // Létrehozzuk az adatfogadási streamet és a sockethez kötjük.
         receiveStream = std::make_unique<QDataStream>(currentConnectionSocket);
 
-        qWarning() << "SocketServer::newConnection: Az új kapcsolat felépült.";
+        qDebug() << "SocketServer::newConnection: Az új kapcsolat felépült.";
     }
 }
 
 void SocketServer::disconnected()
 {
-    qWarning() << "SocketServer::disconnected: Lezáródott a kapcsolat.";
+    qDebug() << "SocketServer::disconnected: Lezáródott a kapcsolat.";
 }
 
 void SocketServer::dataReceived()

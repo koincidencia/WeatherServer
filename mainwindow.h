@@ -59,6 +59,8 @@ class MainWindow : public QMainWindow
 public:
   explicit MainWindow(QWidget *parent = 0);
   ~MainWindow();
+
+  static QTextEdit * s_textEdit;
   
   void setupDemo(int demoIndex);
   void setupQuadraticDemo(QCustomPlot *customPlot);
@@ -67,12 +69,15 @@ public slots:
   void plotData(QQueue<double>& data, QDateTime& time);
   void plotLog(QVector<double>&,QVector<QVector<double>>&);
   void loadLog(bool);
+  void putStringToGUI(QString&);
 
   void keyPressEvent(QKeyEvent*);
   void keyReleaseEvent(QKeyEvent*);
 
 signals:
   void loadLogFile(QString);
+
+private slots:
 
 private:
   Ui::MainWindow *ui;

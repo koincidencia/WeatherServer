@@ -50,6 +50,8 @@
 #include <QQueue>
 #include <QDateTime>
 
+QTextEdit * MainWindow::s_textEdit = 0;
+
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -105,8 +107,11 @@ MainWindow::MainWindow(QWidget *parent) :
   ui->customPlot3->graph()->setLineStyle(QCPGraph::lsNone);
   ui->customPlot3->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCross, 4));
 
+  s_textEdit = ui->logText;
 }
+
 MainWindow::~MainWindow(){}
+
 void MainWindow::plotData(QQueue<double>& data, QDateTime& time)
 {
     timeVec.append(time.toTime_t());
@@ -120,6 +125,7 @@ void MainWindow::plotData(QQueue<double>& data, QDateTime& time)
 
     statusBar()->clearMessage();
 }
+
 void MainWindow::plotLog(QVector<double>& timeVec,QVector<QVector<double>>& dataVec)
 {
     this->timeVec = timeVec;
@@ -147,7 +153,10 @@ void MainWindow::loadLog(bool b)
     emit loadLogFile(QString("dataLog.txt"));
 }
 
-
+void MainWindow::putStringToGUI(QString& str)
+{
+    ui->logText->append(str);
+}
 
 void MainWindow::keyReleaseEvent(QKeyEvent* e)
 {
@@ -169,18 +178,4 @@ void MainWindow::keyPressEvent(QKeyEvent* e)
 {
     return;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -19,13 +19,13 @@ void Application::serverDataReady(QDataStream& inStream)
     qint32 num=inStream.readRawData((char*)rawData,256);
     if (num < 0)
     {
-        qWarning() << "Hiba a vett adatokban :(";
+        qDebug() << "Hiba a vett adatokban :(";
     }
     else
     {
         rawData[num]=0;
-        qWarning() << "A kliens socketen üzenet érkezett: " << (char*)rawData;
-        qWarning() << "Az érkezett bájtok száma: " << num;
+        qDebug() << "A kliens socketen üzenet érkezett: " << (char*)rawData;
+        qDebug() << "Az érkezett bájtok száma: " << num;
     }
     /** Válasz küldése, a modul ezután megszíkítja a kapcsolatot és alvó üzemmódba lép.*/
     server.send("Minden OK.");
